@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MIT AI Startup Generator</title>
+<meta name="description" content="Generate your billion-dollar AI startup. Built at MIT AI Executive Academy 2026.">
+<meta property="og:title" content="MIT AI Startup Generator">
+<meta property="og:description" content="Your billion-dollar AI startup idea, instantly. Built at the MIT AI Executive Academy 2026.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f3f0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:#1B1B1B;-webkit-font-smoothing:antialiased;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+canvas.confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+
+/* SVG ICON SYSTEM */
+.ico{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0}
+.ico svg{width:100%;height:100%}
+.ico-sm{width:14px;height:14px}
+.ico-lg{width:22px;height:22px}
+
+.wrap{width:92%;max-width:620px;margin:0 auto;padding:48px 0}
+
+/* HEADER */
+.badge{display:inline-flex;align-items:center;gap:8px;background:#A31F34;color:#fff;font-size:10px;font-weight:700;padding:6px 16px;border-radius:100px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px}
+.badge .sep{opacity:.4}
+h1{font-size:clamp(32px,6vw,48px);font-weight:900;color:#1B1B1B;letter-spacing:-1.5px;line-height:1;margin-bottom:6px}
+.subtitle{font-size:clamp(15px,3vw,18px);font-weight:400;color:#444;margin-bottom:10px;letter-spacing:-.2px}
+.desc{font-size:14px;color:#666;max-width:440px;margin:0 auto;line-height:1.6}
+
+/* BUTTON */
+.gen-btn{width:100%;padding:20px 32px;border-radius:14px;border:none;background:#A31F34;color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 24px rgba(163,31,52,.25);margin:32px 0 28px;position:relative;overflow:hidden;letter-spacing:.3px;font-family:inherit}
+.gen-btn:hover{transform:translateY(-1px);box-shadow:0 8px 36px rgba(163,31,52,.35);background:#8B1A2B}
+.gen-btn:active{transform:translateY(0)}
+.gen-btn.loading{background:#ccc;box-shadow:none;cursor:wait;color:#999}
+.gen-btn .shimmer{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* HISTORY */
+.history{margin-bottom:28px}
+.history-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px;font-weight:700}
+.history-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+.history-pills::-webkit-scrollbar{height:3px}
+.history-pills::-webkit-scrollbar-thumb{background:rgba(163,31,52,.2);border-radius:10px}
+.pill{background:#fff;color:#888;border:1px solid #e5e3e0;padding:6px 18px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;white-space:nowrap;font-family:inherit}
+.pill:hover{border-color:#A31F34;color:#A31F34}
+.pill.active{background:#A31F34;color:#fff;border-color:#A31F34}
+
+/* CARD */
+.card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 40px rgba(0,0,0,.06);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.card.hidden{opacity:0;transform:translateY(30px) scale(.97)}
+.card-hero{background:linear-gradient(135deg,#A31F34,#8B1A2B,#6a1020);padding:clamp(24px,5vw,40px) clamp(22px,5vw,36px) clamp(22px,4vw,32px);position:relative;overflow:hidden}
+.card-hero .pattern{position:absolute;top:0;left:0;right:0;bottom:0;opacity:.04;background-image:repeating-linear-gradient(45deg,transparent,transparent 35px,rgba(255,255,255,.5) 35px,rgba(255,255,255,.5) 36px)}
+.card-hero .inner{position:relative}
+.startup-name{font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,7vw,48px);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.05;margin-bottom:10px}
+.tagline{font-size:clamp(13px,2.5vw,15px);color:rgba(255,255,255,.65);font-style:italic;line-height:1.5}
+.comparison-pill{display:inline-block;margin-top:18px;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);padding:7px 18px;border-radius:100px;font-size:12px;color:rgba(255,255,255,.9);font-weight:600;letter-spacing:.2px}
+.card-body{padding:0 clamp(22px,5vw,36px) clamp(24px,4vw,36px)}
+
+/* ORIGIN BADGE */
+.origin{display:flex;align-items:center;gap:12px;background:rgba(163,31,52,.04);border:1px solid rgba(163,31,52,.08);border-radius:12px;padding:14px 18px;margin-top:24px}
+.origin .icon{flex-shrink:0;width:32px;height:32px;border-radius:8px;background:rgba(163,31,52,.08);display:flex;align-items:center;justify-content:center}
+.origin .icon svg{width:16px;height:16px;stroke:#A31F34;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.origin .text{font-size:12px;color:#777;line-height:1.5}
+.origin .text strong{color:#A31F34}
+
+/* PHOTO LOCATION */
+.loc-card{border-radius:14px;overflow:hidden;margin-top:14px;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.loc-card img{width:100%;height:220px;object-fit:cover;display:block}
+.loc-card .loc-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
+.loc-card .loc-pin{font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:6px;letter-spacing:.3px}
+.loc-card .loc-pin .ico svg{stroke:rgba(255,255,255,.65);fill:none;stroke-width:2}
+.loc-card .loc-name{font-size:15px;font-weight:700;color:#fff;margin-top:3px}
+
+/* STOCK TICKER */
+.ticker{background:#1B1B1B;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;margin-top:14px}
+.ticker-sym{font-size:13px;font-weight:800;color:rgba(255,255,255,.9);font-family:'Inter',monospace;letter-spacing:.5px}
+.ticker-price{font-size:20px;font-weight:700;color:#fff}
+.ticker-change{font-size:12px;font-weight:600}
+.ticker-change.up{color:#34d399}
+.ticker-change.down{color:#f87171}
+.ticker svg{flex-shrink:0}
+
+/* SECTIONS */
+.sh{font-size:10px;color:#A31F34;text-transform:uppercase;letter-spacing:3px;font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.sh .line{height:1px;flex:1;background:linear-gradient(to right,rgba(163,31,52,.15),transparent)}
+.sh .line.r{background:linear-gradient(to left,rgba(163,31,52,.15),transparent)}
+
+/* FUNDING */
+.funding{background:linear-gradient(135deg,#A31F34,#8B1A2B);color:#fff;padding:22px 28px;border-radius:14px;text-align:center;position:relative;overflow:hidden}
+.funding::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent)}
+.funding .amt{font-size:clamp(28px,6vw,38px);font-weight:900;letter-spacing:-1.5px}
+.funding .stage{font-size:14px;font-weight:600;opacity:.85}
+.funding .note{font-size:12px;opacity:.55;margin-top:6px;font-style:italic}
+
+/* PITCH */
+.pitch{font-size:15px;color:#555;line-height:1.7}
+
+/* OVERHEARD */
+.overheard{background:#faf8f5;border-radius:12px;padding:18px 22px;border-left:3px solid #A31F34}
+.overheard .oh-label{font-size:10px;color:#A31F34;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.overheard .oh-label .ico svg{stroke:#A31F34;fill:none;stroke-width:2}
+.overheard .oh-quote{font-size:14px;color:#444;font-style:italic;line-height:1.6}
+.overheard .oh-ctx{font-size:11px;color:#aaa;margin-top:8px}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.metric{background:#faf8f5;border-radius:10px;padding:12px 14px;text-align:center;border:1px solid #eee;transition:border-color .25s}
+.metric:hover{border-color:rgba(163,31,52,.2)}
+.metric .icon{margin-bottom:4px;display:flex;justify-content:center}
+.metric .icon svg{width:16px;height:16px;stroke:#A31F34;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.metric .label{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px}
+.metric .val{font-size:14px;font-weight:700;color:#1B1B1B}
+
+/* TEAM */
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:#1B1B1B;color:#fff;padding:6px 16px;border-radius:100px;font-size:12px;font-weight:500;transition:background .25s}
+.tag:hover{background:#A31F34}
+
+/* RED FLAGS */
+.flag{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#666;line-height:1.5;padding:5px 0}
+.flag .ficon{flex-shrink:0;margin-top:2px}
+.flag .ficon svg{width:14px;height:14px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* TROPE */
+.trope-card{display:flex;align-items:flex-start;gap:12px;background:#fef9e7;border-radius:12px;padding:14px 18px;border:1px solid rgba(241,196,15,.2)}
+.trope-card .ico svg{stroke:#b8860b;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.trope-card span{font-size:13px;color:#7d6608;line-height:1.5}
+
+/* REVIEWS */
+.review{background:#faf8f5;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;font-style:italic;line-height:1.5;border-left:2px solid #ddd}
+
+/* TECHCRUNCH */
+.tc{background:#f0faf2;border-radius:12px;padding:18px 22px;border-left:3px solid #22c55e}
+.tc .badge2{font-size:10px;color:#16a34a;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:2px;display:flex;align-items:center;gap:6px}
+.tc .badge2 .ico svg{stroke:#16a34a;fill:none;stroke-width:2}
+.tc .hl{font-size:16px;font-weight:700;color:#1B1B1B;line-height:1.5}
+.tc .byline{font-size:11px;color:#aaa;margin-top:8px}
+
+/* EXIT */
+.exit{background:#faf8f5;border-radius:12px;padding:16px 22px;font-size:14px;color:#555;font-weight:500;border:1px solid #eee;display:flex;align-items:center;gap:12px;line-height:1.5}
+.exit .ico svg{stroke:#A31F34;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* INVESTOR QUOTE */
+.iq{border-left:2px solid #A31F34;padding-left:20px;margin-left:4px}
+.iq .qt{font-size:16px;color:#333;font-style:italic;line-height:1.6;font-weight:400}
+.iq .src{font-size:12px;color:#aaa;margin-top:8px;font-weight:600}
+
+/* LINKEDIN */
+.li-card{background:#f3f6f8;border-radius:14px;overflow:hidden;border:1px solid #e5e3e0}
+.li-header{padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee}
+.li-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#A31F34,#8B1A2B);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.li-name{font-size:13px;font-weight:700;color:#1B1B1B}
+.li-title{font-size:11px;color:#aaa}
+.li-body{padding:18px;font-size:13px;color:#555;line-height:1.7;white-space:pre-line;overflow:hidden;position:relative;transition:max-height .4s ease}
+.li-body.collapsed{max-height:120px}
+.li-body .fade{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,#f3f6f8)}
+.li-actions{padding:10px 18px 14px;display:flex;gap:8px}
+.li-actions button{border-radius:100px;padding:6px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .25s}
+.li-toggle{background:#fff;border:1px solid #ddd;color:#888}
+.li-toggle:hover{border-color:#A31F34;color:#A31F34}
+.li-copy{background:#A31F34;border:none;color:#fff}
+.li-copy:hover{background:#8B1A2B}
+.li-copy.copied{background:#22c55e}
+
+/* FOOTER */
+.footer{text-align:center;margin-top:48px;padding-top:24px;border-top:1px solid rgba(0,0,0,.05)}
+.footer p{font-size:11px;color:#999;margin-bottom:4px}
+.footer p.sub{font-size:10px;color:#aaa}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  h1{letter-spacing:-1px}
+  .gen-btn{font-size:16px;padding:18px 24px;border-radius:12px}
+  .card{border-radius:16px}
+  .loc-card img{height:180px}
+  .ticker{padding:12px 14px;gap:10px;flex-wrap:wrap;justify-content:center}
+  .ticker-price{font-size:17px}
+  .ticker svg{width:160px;height:48px}
+  .metrics{grid-template-columns:1fr 1fr;gap:6px}
+  .metric{padding:10px 10px}
+  .metric .val{font-size:13px}
+  .tags{gap:5px}
+  .tag{font-size:11px;padding:5px 14px}
+  .sh{font-size:9px;letter-spacing:2px;margin:22px 0 10px}
+  .pitch{font-size:14px}
+  .overheard{padding:14px 16px}
+  .overheard .oh-quote{font-size:13px}
+  .tc{padding:14px 16px}
+  .tc .hl{font-size:14px}
+  .iq .qt{font-size:14px}
+  .li-body{font-size:12px}
+  .exit{font-size:13px;padding:14px 18px}
+  .flag{font-size:12px}
+  .review{font-size:11px}
+}
+@media(max-width:360px){
+  .ticker svg{width:130px;height:40px}
+  .metrics{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<div class="wrap">
+  <div style="text-align:center;margin-bottom:36px">
+    <div class="badge">
+      <span>MIT AI Executive Academy</span>
+      <span class="sep">|</span>
+      <span>March 2026</span>
+    </div>
+    <h1>Startup Generator</h1>
+    <div class="subtitle">Think you have what it takes to build the next billion-dollar unicorn?</div>
+    <p class="desc">Generate your fully-formed AI startup — born in the halls of E62, funded before lunch, and pivoted by dinner. Complete with valuation, team, metrics, red flags, press coverage, and a LinkedIn post ready to ship.</p>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">Generate Your Startup</button>
+
+  <div class="history" id="historySection" style="display:none">
+    <div class="history-label">Portfolio (<span id="historyCount">0</span> startups)</div>
+    <div class="history-pills" id="historyPills"></div>
+  </div>
+
+  <div id="cardContainer"></div>
+
+  <div class="footer">
+    <p>A product of questionable judgment and too much espresso at E62.</p>
+    <p class="sub">MIT Executive Education AI Exec Academy · March 23 – April 3, 2026</p>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// MIT AI EXECUTIVE ACADEMY — CONTENT POOLS
+// ═══════════════════════════════════════════════════════════════
+
+// PROFESSORS — ALL 15
+const PROFESSORS = [
+  { name: "Sertac Karaman", topic: "AI, data strategy, compute & deployment", short: "Sertac" },
+  { name: "Eric So", topic: "use cases, prompting, behavioral economics & Co-Work", short: "Eric" },
+  { name: "Wojciech Matusik", topic: "ML & generative AI fundamentals", short: "Wojciech" },
+  { name: "Vincent Sitzmann", topic: "multi-modal generative AI", short: "Vincent" },
+  { name: "John J. Horton", topic: "AI agents & business simulation", short: "Horton" },
+  { name: "Priya Donti", topic: "AI, energy use & sustainability", short: "Priya" },
+  { name: "Tim Kraska", topic: "agentic AI", short: "Kraska" },
+  { name: "Etay Maor", topic: "AI & cybersecurity", short: "Etay" },
+  { name: "Regina Barzilay", topic: "AI for healthcare & life sciences", short: "Barzilay" },
+  { name: "Nick van der Meulen", topic: "digital business transformation", short: "Nick" },
+  { name: "Aleksander Madry", topic: "ethical & trust considerations in AI", short: "Madry" },
+  { name: "Renee Richardson Gosline", topic: "AI & marketing", short: "Renee" },
+  { name: "David Simchi-Levi", topic: "supply chain transformation with AI", short: "Simchi-Levi" },
+  { name: "Danielle Li", topic: "AI for competitive advantage & future of workforce", short: "Danielle" },
+  { name: "Steven Eppinger", topic: "deploying AI for innovation", short: "Eppinger" },
+  { name: "Gary Gensler", topic: "AI & money", short: "Gensler" },
+  { name: "Daniel P. Huttenlocher", topic: "the age of AI & our human future", short: "Huttenlocher" },
+  { name: "Roberto Fernandez", topic: "resistance to change & AI adoption", short: "Fernandez" },
+  { name: "Will Oliver", topic: "quantum computing myths & truths", short: "Oliver" },
+];
+
+// SESSIONS — FULL 2 WEEKS
+const SESSIONS = [
+  // Week 1
+  "AI's Potential to Transform Our World Today",
+  "Today's AI: Data and Compute",
+  "Use Cases at Work: Where Does AI Fit In?",
+  "Hands On: Effective Prompting",
+  "Your Data Strategy for AI",
+  "Fundamentals of Machine Learning",
+  "Fundamentals of Generative AI",
+  "Hands On: Customization",
+  "Multi-Modal Generative AI",
+  "AI Agents for Business Simulation",
+  "AI, Energy Use & Sustainability",
+  "Hands On: Coding + Co-Work",
+  "Deploying AI",
+  "Agentic AI",
+  "Economic Decisions in AI: A Behavioral Perspective",
+  "Hands On: Building AI Agents",
+  "AI & Cybersecurity",
+  "AI for Healthcare & Life Sciences",
+  "Digital Business Transformation in the Age of AI",
+  "Hands On: AI in Images, Video & Voice",
+  "Capstone Project Introduction",
+  // Week 2
+  "Ethical & Trust Considerations in AI",
+  "AI & Marketing",
+  "Supply Chain Transformation with AI",
+  "AI for Competitive Advantage",
+  "AI & The Future of the Workforce",
+  "AI: The Intelligence Paradox",
+  "Deploying AI for Innovation",
+  "AI & Money",
+  "The Age of AI & Our Human Future",
+  "Resistance to Change: Leading AI Adoption at Work",
+  "Quantum Computing Myths & Truths",
+  "The Great Debate",
+  "Report Outs: Capstone Projects",
+  "Learning Synthesis",
+];
+
+// FRAMEWORKS & CONCEPTS
+const FRAMEWORKS = [
+  "Amara's Law",
+  "Homo Silicus",
+  "Sertac's Three Buckets (Training / Fine-tuning / Prompting)",
+  "Institutional Memory",
+  "Assist vs. Automate",
+  "Synthetic Customers",
+  "Overfitting (explained like you're 10)",
+  "the Data Strategy for AI framework",
+  "the Jagged Frontier (it's expanding)",
+  "Co-Intelligence (Ethan Mollick's Four Rules)",
+  "Efficiency AI vs. Opportunity AI",
+  "Infinite Interns (600K reports for $250)",
+  "next-token prediction (it completes patterns, it doesn't look things up)",
+  "the Intelligence Paradox",
+  "agentic AI orchestration",
+  "Gensler's AI & Money framework",
+  "Madry's trust calibration model",
+  "resistance to change theory",
+  "digital business transformation maturity",
+  "quantum computing (the myths, not the truths)",
+  "Huttenlocher's human-AI future thesis",
+  "supply chain AI transformation",
+  "the Schwarzman College of Computing ethos",
+];
+
+// THINGS THAT WERE DEFINITELY SAID (PROBABLY)
+// These are satirical. Any resemblance to actual faculty statements is entirely intentional.
+const OVERHEARD = [
+  // From actual slides / paraphrased from real content
+  { quote: "Assume this is the worst AI you will ever use.", ctx: "Eric So, AI at Work — it's on the slides, people" },
+  { quote: "Always invite AI to the table.", ctx: "Eric So, AI at Work — Rule 1 of Co-Intelligence" },
+  { quote: "Treat AI like a person. But tell it what kind of person it is.", ctx: "Eric So, AI at Work — Ethan Mollick's Four Rules" },
+  { quote: "Be the human in the loop.", ctx: "Eric So, AI at Work — easier said than done" },
+  { quote: "Garbage in, confident garbage out.", ctx: "Wojciech Matusik, Fundamentals of ML — new favorite phrase" },
+  { quote: "Fluency is not reliability.", ctx: "Wojciech, Fundamentals of Generative AI — write this on your wall" },
+  { quote: "Hallucination is a design constraint, not a bug to be fixed.", ctx: "Wojciech, Gen AI — the room went quiet" },
+  { quote: "Correct output and incorrect output look exactly the same.", ctx: "Wojciech, Gen AI — the room went quieter" },
+  { quote: "Deploy with discipline, not hype.", ctx: "Wojciech, Gen AI — good luck with that" },
+  { quote: "No held-out test set, no evidence it works.", ctx: "Wojciech, Fundamentals of ML — vibes-based machine learning" },
+  { quote: "Like a student who aces practice tests but fails the exam.", ctx: "Wojciech on overfitting — too real" },
+  { quote: "Sometimes good prompting can be better than fine-tuning.", ctx: "Sertac, Data Strategy — the three buckets in action" },
+  { quote: "The model has already seen what you're looking for in its training data. Often from the Internet.", ctx: "Sertac, Data Strategy — comforting and terrifying" },
+  { quote: "Our world isn't just text.", ctx: "Vincent Sitzmann, Multi-Modal Generative AI — opening line" },
+  { quote: "Tokens are discrete chunks of the signal we want to model.", ctx: "Vincent, Multi-Modal — everyone nodded, some understood" },
+  { quote: "Infinite interns. Reading 600K reports in 8 hours for about $250.", ctx: "John Horton, AI Agents for Business Simulation — the future of labor" },
+  { quote: "A surprisingly powerful use of LLMs has been role-playing or pretending to be certain humans.", ctx: "Horton, AI Agents — Homo Silicus enters the chat" },
+  { quote: "Robot Libertarians don't negotiate on price.", ctx: "Horton, AI Agents — political AI is a thing now" },
+  { quote: "A promising approach but not a substitute for talking to real customers.", ctx: "Horton, AI Agents — the disclaimer nobody reads" },
+  { quote: "The jagged frontier is expanding.", ctx: "Eric So, AI at Work — and so are our expectations" },
+  // Satirical / Program vibes
+  { quote: "Mollie, can you remind them about the microphones again?", ctx: "Every session, E62 Room 176" },
+  { quote: "Please use the microphone. Please. PLEASE.", ctx: "Program staff, losing the will to live, Day 4" },
+  { quote: "Can everyone hear— no? Okay, USE THE MIC.", ctx: "Erin Alzapiedi, channeling energy she didn't know she had" },
+  { quote: "The WhatsApp group has more engagement than our enterprise Slack.", ctx: "Participant, break time" },
+  { quote: "I came for the AI. I'm staying for the coffee breaks.", ctx: "Honest participant, Day 3" },
+  { quote: "There's an espresso machine in the faculty lounge. I can take you there.", ctx: "Eric So — legend, Day 2" },
+  { quote: "The cohort asked for espresso. The program team delivered an espresso machine. Within 24 hours.", ctx: "Fastest deployment in MIT history" },
+  { quote: "The espresso machine has higher utilization than any AI tool discussed so far.", ctx: "Honest participant, Day 3" },
+  { quote: "The capstone is due Friday and half the teams just discovered Git.", ctx: "Overheard in E62, Week 2" },
+  { quote: "I came to learn about AI. I'm leaving with opinions about supply chains.", ctx: "Participant, Week 2 lunch" },
+  { quote: "The Great Debate is going to be a bloodbath.", ctx: "WhatsApp group chat, Day 9" },
+];
+
+// PROGRAM TROPES
+const TROPES = [
+  "Someone asks if this will replace jobs in the first 5 minutes",
+  "Slide with Amara's Law appears and half the room takes a photo",
+  "Debate about centralizing AI under the CIO vs. letting teams experiment",
+  "'We're fine with assistance, not decisions' gets repeated all day",
+  "Someone mentions Copilot license costs and the room groans",
+  "Everyone nods when 'messy data can 3x your costs' shows up",
+  "Break goes 15 minutes over because the questions keep coming",
+  "Half the room admits they haven't touched the hands-on labs yet",
+  "Someone calls it 'ChatGPT' even when the slide says 'Claude'",
+  "At least one question about AGI timelines per session",
+  "Someone tries to pitch their startup to a professor during lunch",
+  "Three people discover they're in the same industry and immediately start a group chat",
+  "The campus tour group gets lost in the Infinite Corridor",
+  "Learning Synthesis turns into group therapy about digital transformation",
+  "Someone asks 'but what about hallucinations?' for the 9th time",
+  "WhatsApp group chat blows up during a break with memes from the lecture",
+  "Someone still hasn't installed Node.js despite 3 reminder emails",
+  "Capstone team discovers they all had the same idea at 11pm",
+  "The Messy Desktop exercise takes longer than expected because everyone's desktop is actually messy",
+  "Week 1 dinner at MIT Museum turns into an impromptu networking event",
+  "Someone asks Gary Gensler about crypto and the room goes silent",
+  "Capstone project presentation runs 3x over the time limit",
+  "Someone suggests using quantum computing and Will Oliver gently corrects them",
+  "The Great Debate gets heated enough that Eric has to moderate",
+  "Glass House closing dinner gets emotional, LinkedIn connections requested in real-time",
+  "Someone pitches their capstone to a VC during the Certificate Ceremony",
+  "A participant's phone buzzes during Barzilay's healthcare talk and they pretend it didn't happen",
+  "Etay Maor shows a live hack demo and half the room changes their passwords during the break",
+  "Mollie reminds the class to use the microphones for the 47th time this week",
+  "Erin sends a perfectly timed WhatsApp message about tomorrow's schedule as the current session is still going",
+  "Kristine and Emily somehow have the room set up perfectly every single morning despite the chaos",
+  "The program team deploys an espresso machine faster than most companies deploy AI",
+  "Someone asks Eric about the faculty lounge espresso and a pilgrimage begins",
+  "The espresso machine line is longer than the break",
+  "Program staff politely reminds everyone that 'break' means 15 minutes, not 35",
+  "Mollie's 'gentle reminder' emails are more effective than any AI agent built this week",
+  "WhatsApp group chat has 47 unread messages and you were only in the bathroom for 3 minutes",
+  "Someone drops a Shy Bird dinner reservation in the WhatsApp and 14 people respond in 30 seconds",
+  "The WhatsApp group chat collectively rates every restaurant within a 10-minute walk of E62",
+  "Someone asks for restaurant recs in the chat and gets a 23-message thread before the session ends",
+  "Bakely coffee run turns into a 40-minute networking session on the sidewalk",
+  "The Shy Bird group keeps growing until the reservation is for the entire cohort",
+  "Someone discovers the Shy Bird happy hour and it becomes the unofficial post-class meeting spot",
+  "WhatsApp group chat has a dedicated sub-thread just for Kendall Square food reviews",
+  "Third visit to Shy Bird this week and the host recognizes the whole group",
+  "Bakely barista now knows everyone's order and which session they're running late for",
+  "Someone shares a Cambridge walking food tour and the entire WhatsApp thread pivots to restaurant rankings",
+  "The WhatsApp group chat has more engagement than most companies' Slack",
+  "Half the cohort is at Shy Bird, the other half is in the WhatsApp chat asking what they're ordering",
+  "Someone discovers an amazing ramen spot and guards the info like proprietary training data",
+  "Debate over best coffee near Sloan — Bakely vs. faculty lounge espresso — splits the cohort",
+  "Group dinner coordination in the WhatsApp takes longer than the actual dinner",
+];
+
+// STARTUP NAME POOLS
+const PREFIXES = [
+  "Quantum","Neural","Deep","Meta","Hyper","Nano","Omni","Turbo",
+  "Synth","Flux","Proto","Nexus","Aero","Crypto","Bio","Apex",
+  "Vertex","Zeno","Helix","Pulse","Core","Vibe","Dyna","Ultra",
+  "Tensor","Lambda","Eigen","Sigma","Alpha","Zero","Algo","Byte",
+  "Infini","Stellar","Neuro","Holo","Tera","Giga","Phi","Theta",
+  "Astro","Pyro","Cryo","Magna","Nova","Lumen","Opti","Strato",
+  "Homo","Silicus","Amara","Bucket","Sloan","E62",
+];
+
+const SUFFIXES = [
+  "Mind","Flow","Forge","Labs","Stack","Sphere","Wave","Shift",
+  "Loop","Bridge","Pulse","Dock","Hive","Link","Grid","Spark",
+  "Scale",".ai",".io","X","OS","Hub","Sync","Lens",
+  "Think","Base","Craft","Core","Net","Logic","Sense","Path",
+  "Works","GPT","Verse","Space","Chain","Beam","Edge","Prime",
+  "Atlas","Layer","Cloud","Nest","Wise","Matic","Mint","Swap",
+];
+
+// VERTICALS — MIX OF GENERIC + MIT-SPECIFIC
+const VERTICALS = [
+  // MIT-Specific
+  "agent-based simulation of your next board meeting",
+  "multi-modal AI for reading whiteboards from blurry photos",
+  "energy-aware LLM routing for corporate compliance teams",
+  "an exec-ed copilot that attends the program for you and sends notes",
+  "synthetic customers for A/B testing terrible pricing decisions",
+  "gen AI for rewriting slide decks at 1 AM before demo day",
+  "prompt-driven campus tour recommenders for first-time visitors to Kendall Square",
+  "AI that estimates how many hands-on labs you'll actually finish",
+  "sustainability metrics generation for ESG reports nobody reads",
+  "reinforcement learning for toddler negotiations (per Sertac's 3D printing story)",
+  "prompting orchestration that rivals fine-tuning (but cheaper)",
+  "synthetic snow-shovel customers for price gouging research",
+  "multi-modal AI that understands robotics but not your procurement process",
+  "sustainability-aligned compute that still burns through runway",
+  "institutional memory platforms for companies that keep losing their Google Docs",
+  "Homo Silicus workforce simulations that outperform your actual workforce",
+  "Amara's Law compliance dashboards (overestimate short-term, underestimate everything else)",
+  "three-bucket optimization (training when you should be prompting)",
+  "AI-powered Learning Synthesis that generates insights you already knew",
+  "overfitting detection for business strategies, not just models",
+  "assist-vs-automate decision engines for executives who can't decide",
+  "AI agents that simulate your procurement department (results are depressing)",
+  "agentic AI that attends meetings on your behalf and makes better decisions",
+  "cybersecurity AI that's more paranoid than your CISO",
+  "AI-powered clinical trial matching that actually works (unlike your last 3 hires)",
+  "supply chain AI that predicted the disruption your board ignored",
+  "resistance-to-change detection for executives who say they're 'all in on AI'",
+  "quantum-resistant encryption for companies that don't understand regular encryption",
+  "AI marketing copy that's indistinguishable from a Renee Gosline lecture",
+  "competitive advantage AI that tells you your moat is actually a puddle",
+  "workforce transformation AI that gently suggests you're the one being automated",
+  "innovation deployment pipelines for companies that deploy nothing",
+  "ethical AI compliance dashboards that nobody at the company actually reads",
+  "capstone project generators for exec-ed students who procrastinated all week",
+  "AI & Money platforms that make Gary Gensler ask uncomfortable questions",
+  "human-future alignment AI inspired by Huttenlocher's closing keynote",
+  "Glass House dinner conversation simulators for introverted executives",
+  "jagged frontier mapping so you know which tasks AI will ruin",
+  "infinite intern platforms — 600K reports in 8 hours for $250",
+  "Homo Silicus customer panels that are cheaper and more honest than focus groups",
+  "Robot Libertarian vs. Robot Socialist debate simulators",
+  "next-token prediction for predicting what your CEO will say in all-hands",
+  "fluency-vs-reliability detectors for AI outputs that sound confident but are wrong",
+  "hallucination-as-a-feature platforms for creative industries",
+  "espresso machine utilization tracking for executive education programs",
+  "co-intelligence frameworks for people who still forward chain emails",
+  "efficiency AI for tasks you shouldn't be doing and opportunity AI for tasks you're afraid to try",
+  // Generic (still funny)
+  "artisanal data labeling",
+  "blockchain-powered meditation",
+  "AI-generated corporate synergy",
+  "GPT-powered parking optimization",
+  "neural network marriage counseling",
+  "deep learning kombucha brewing",
+  "machine learning dog walking",
+  "AI-curated office playlists",
+  "predictive analytics for brunch reservations",
+  "NLP-powered passive aggression detection",
+  "computer vision for finding lost socks",
+  "generative AI for LinkedIn thought leadership",
+  "autonomous drone-delivered apologies",
+  "LLM-powered horoscope generation",
+  "federated learning for neighborhood gossip",
+  "diffusion model tattoo previews",
+  "RAG-powered excuse generation",
+  "agentic workflows for ordering lunch",
+  "fine-tuned models for parallel parking",
+  "multimodal AI for reading the room",
+  "AI-native spreadsheet therapy",
+  "vector search for your missing keys",
+  "sentiment analysis for passive-aggressive Slack messages",
+  "attention mechanisms for people who can't pay attention",
+  "knowledge graphs for office politics",
+  "chain-of-thought reasoning for IKEA furniture assembly",
+  "mixture-of-experts for being mediocre at everything",
+  "edge computing for people on the edge of a breakdown",
+  "prompt injection defense for your children",
+  "constitutional AI for your homeowners association",
+  "multi-agent debate systems for deciding where to eat",
+  "AI-powered restaurant recommendation engine that only suggests Shy Bird",
+  "NLP-based WhatsApp group chat summarizer for people who muted the thread",
+  "real-time Bakely coffee queue prediction using computer vision",
+  "agentic reservation system that books Shy Bird before you even decide you're hungry",
+  "sentiment analysis for WhatsApp group chat restaurant debates",
+  "Kendall Square dining optimization using multi-armed bandit algorithms",
+];
+
+const VALUATIONS = [
+  {a:"$500K",s:"Pre-Seed",n:"Mom's money + someone from the program"},
+  {a:"$2.3M",s:"Seed",n:"YC W26 — demo day was 47 seconds"},
+  {a:"$7M",s:"Seed",n:"Oversubscribed by people who didn't read the deck"},
+  {a:"$12M",s:"Series A",n:"Led by a16z (associate's side bet)"},
+  {a:"$47M",s:"Series B",n:"Despite zero revenue and negative NPS"},
+  {a:"$180M",s:"Series C",n:"Valuation based entirely on vibes"},
+  {a:"$420M",s:"Series D",n:"The board meeting was 4 minutes"},
+  {a:"$2.1B",s:"Unicorn",n:"We don't know how either"},
+  {a:"$69M",s:"Series A",n:"The partners thought this was funny"},
+  {a:"$1T",s:"Series Z",n:"AI bubble go brrrrr"},
+  {a:"$33M",s:"Series A",n:"3 slides, no product, enormous confidence"},
+  {a:"$800K",s:"Angel",n:"From a person in the MIT AI Executive Academy cohort"},
+  {a:"$15M",s:"Seed",n:"Largest seed in history for this vertical (only seed in history for this vertical)"},
+  {a:"$350M",s:"Series C",n:"SoftBank wired the money before the call ended"},
+  {a:"$4.7M",s:"Seed",n:"Closed during a coffee break at E62"},
+  {a:"$88M",s:"Series B",n:"Revenue? We prefer the term 'future revenue'"},
+  {a:"$38M",s:"Series A",n:"Pitched during Learning Synthesis, closed by lunch"},
+  {a:"$6M",s:"Seed",n:"Sertac's three buckets convinced the LP"},
+  {a:"$22M",s:"Series A",n:"Pitched at the Glass House closing dinner, signed on a napkin"},
+  {a:"$110M",s:"Series B",n:"Gensler said it was 'interesting' — VCs interpreted this as approval"},
+  {a:"$9M",s:"Seed",n:"Capstone project judges were secretly angel investors"},
+  {a:"$55M",s:"Series A",n:"MIT Sloan Executive Certificate used as collateral"},
+];
+
+const QUOTES = [
+  {q:"Shut up and take my money.",s:"Every VC on Sand Hill Road"},
+  {q:"This is either genius or insanity. I'm in.",s:"a16z partner, 2am email"},
+  {q:"I don't understand it but my 22-year-old associate says it's hot.",s:"Anonymous LP"},
+  {q:"Pivot immediately.",s:"Your board, 3 weeks post-funding"},
+  {q:"We believe in the founders' hallucination — I mean, vision.",s:"Sequoia Capital"},
+  {q:"Is this legal? Don't answer that. Here's a term sheet.",s:"Tiger Global"},
+  {q:"We're pre-revenue, pre-product, and pre-idea, but we have a Notion doc.",s:"The founders, Demo Day"},
+  {q:"I invested because the pitch deck font was really clean.",s:"SoftBank Vision Fund"},
+  {q:"The TAM is literally everyone with a pulse. And some without.",s:"Pitch deck, slide 4"},
+  {q:"We're not a startup, we're a movement.",s:"Founder's LinkedIn, 47 likes"},
+  {q:"Our moat is that nobody else is dumb enough to try this.",s:"Y Combinator Demo Day"},
+  {q:"It's like Uber, but for things that don't need an Uber.",s:"Seed pitch, minute 2"},
+  {q:"AI will solve this. Don't ask me how. Just trust the architecture.",s:"CTO, day one, only employee"},
+  {q:"We spent our entire seed round on a brand identity workshop.",s:"Founder, Series A panic pitch"},
+  {q:"Revenue is a vanity metric.",s:"CEO, month 14 of zero revenue"},
+  {q:"We're one pivot away from product-market fit. We've been one pivot away for 3 years.",s:"Board meeting minutes"},
+  {q:"The best time to invest was yesterday. The second best time is before you read our financials.",s:"Fundraising email"},
+  {q:"They literally pitched this during 'Hands On: Effective Prompting' and I was sold.",s:"Angel investor who was auditing the program"},
+  {q:"Sertac said to try prompting first. We raised $12M to try prompting first.",s:"Founder, post-Demo Day"},
+  {q:"Gensler asked about our revenue model. We pivoted during the Q&A.",s:"Capstone presentation, Day 10"},
+  {q:"I learned more from the WhatsApp group chat than from the pitch deck.",s:"Angel investor in the cohort"},
+  {q:"The capstone judges gave us a B+. VCs gave us a term sheet.",s:"The Great Debate aftermath"},
+  {q:"Huttenlocher said this is the future. Or a warning. Depends on interpretation.",s:"Closing keynote reaction"},
+  {q:"We passed the Barzilay test — our AI actually helps patients.",s:"Healthcare VC, impressed for once"},
+  {q:"I invested because they survived Roberto Fernandez's session on resistance to change without resisting.",s:"LP, post-program"},
+  {q:"The pitch happened at Shy Bird. The term sheet happened before the check arrived. The actual check, not the restaurant check.",s:"Angel, Kendall Square"},
+  {q:"I saw the WhatsApp group chat engagement metrics. That's product-market fit.",s:"VC who was lurking in the cohort chat"},
+  {q:"They had me at 'our office is a table at Bakely.' Low overhead, I respect it.",s:"Seed investor, impressed by capital efficiency"},
+];
+
+const TAGLINES = [
+  "Move fast and hallucinate things.",
+  "Making the world a better place, one API call at a time.",
+  "We put AI in it. Investors loved it.",
+  "Enterprise-grade. Consumer-friendly. Completely unnecessary.",
+  "The future is here. It just doesn't work yet.",
+  "Disrupting an industry that didn't ask to be disrupted.",
+  "Built different. Funded differently. Burns cash identically.",
+  "From E62 with love (and a massive AWS bill).",
+  "Because every problem is a nail when your hammer is a transformer.",
+  "Stealth mode. Except on LinkedIn. And TechCrunch. And this pitch deck.",
+  "Where machine learning meets human yearning.",
+  "We asked ChatGPT if this was a good idea. It said yes. (Temperature 2.0)",
+  "Redefining what it means to have no business model.",
+  "Our runway is short but our dreams are long.",
+  "Powered by AI. Funded by FOMO.",
+  "Think different. Ship nothing.",
+  "Born in Kendall Square. Funded before lunch.",
+  "Assist, don't automate. (Just kidding, we automate everything.)",
+  "We checked all three buckets. Investors checked one: the check.",
+  "Overestimating short-term, underestimating long-term, since 2026.",
+  "Our Homo Silicus customers love us. Real ones? TBD.",
+  "Survived Gary Gensler's questions. Barely.",
+  "Ethically aligned. Financially misaligned.",
+  "Quantum-ready. Revenue-not-ready.",
+  "Won The Great Debate. Lost product-market fit.",
+  "From capstone project to cap table in 48 hours.",
+  "MIT Sloan Executive Certificate in Digital Business (and this startup).",
+  "Schwarzman College of Computing approved. (They did not approve this.)",
+  "Garbage in, confident garbage out. That's our pitch.",
+  "Fluency is not reliability. But it is fundable.",
+  "We crossed the jagged frontier and kept going.",
+  "Always invite AI to the table. Even when the table is on fire.",
+  "Assume this is the worst AI you'll ever use. We did.",
+  "Infinite interns. Zero HR complaints.",
+  "Not a substitute for talking to real customers. But cheaper.",
+  "Deploy with discipline, not hype. (We chose hype.)",
+  "Hallucination is a feature, not a bug. Our investors agreed.",
+  "Ideated at E62. Validated at Shy Bird. Funded before dessert.",
+  "Our first board meeting was a Bakely coffee run that went long.",
+  "Born in a WhatsApp group chat. Funded by the people who couldn't stop texting.",
+];
+
+const ROLES = [
+  "CEO (Chief Evangelism Officer)",
+  "CTO (Can't Turn it Off)",
+  "VP of Vibes",
+  "Head of AI (Actually Just Integrations)",
+  "Chief Disruption Officer",
+  "SVP of Prompt Engineering",
+  "Director of Strategic Pivoting",
+  "Lead Hype Architect",
+  "Principal Buzzword Engineer",
+  "Head of Thought Leadership",
+  "VP of Looking Busy",
+  "Chief Narrative Officer",
+  "Director of Whiteboard Sessions",
+  "Head of Saying 'AI' in Meetings",
+  "SVP of Strategic Deck Design",
+  "Minister of Coffee & Culture",
+  "Chief Pivot Strategist",
+  "Intern (runs everything)",
+  "VP of Learning Synthesis",
+  "Head of the Third Bucket",
+  "Chief Amara's Law Compliance Officer",
+  "Director of Resistance to Change",
+  "SVP of Quantum Readiness (unclear what this means)",
+  "Chief Ethical AI Officer (unpaid)",
+  "Head of Capstone-to-Company Pipeline",
+  "VP of WhatsApp Group Chat Strategy",
+  "Minister of Glass House Networking",
+  "Chief Espresso Deployment Officer",
+  "VP of Microphone Compliance",
+  "Director of WhatsApp Group Chat Moderation",
+  "Head of Jagged Frontier Expansion",
+  "SVP of Confident Garbage (Output Division)",
+  "VP of Shy Bird Reservations",
+  "Chief WhatsApp Group Chat Officer",
+  "Head of Bakely Coffee Procurement",
+  "Director of Kendall Square Restaurant Intelligence",
+];
+
+// TECHCRUNCH — MIX OF GENERIC + MIT
+const TC_TEMPLATES = [
+  "STARTUP emerges from stealth with $VALUATION to bring AI to VERTICAL",
+  "STARTUP raises $VALUATION because apparently VERTICAL needed disrupting",
+  "Exclusive: STARTUP lands $VALUATION, promises to 'change everything' about VERTICAL",
+  "STARTUP nabs $VALUATION from investors who clearly have money to burn on VERTICAL",
+  "Move over, everyone — STARTUP just raised $VALUATION to dominate VERTICAL",
+  "STARTUP bags $VALUATION. Their product? AI for VERTICAL. Their revenue? Don't ask.",
+  "Inside STARTUP's $VALUATION raise — and why VCs are betting big on VERTICAL",
+  "MIT Exec Academy alum raises $VALUATION for VERTICAL after 'something clicked during Learning Synthesis'",
+  "STARTUP spins out of MIT AI Executive Academy, raises $VALUATION to automate VERTICAL",
+  "Sertac's Three Buckets inspire new category: STARTUP raises $VALUATION for VERTICAL",
+  "STARTUP closes $VALUATION round after founders pitch during Hands On: Coding + Co-Work",
+  "John Horton's Homo Silicus concept spawns STARTUP — now valued at $VALUATION for VERTICAL",
+  "Gary Gensler grills STARTUP on financials; somehow still raises $VALUATION for VERTICAL",
+  "STARTUP wins MIT AI Executive Academy capstone, immediately raises $VALUATION",
+  "After attending 'Resistance to Change,' STARTUP founder changes everything — raises $VALUATION for VERTICAL",
+  "STARTUP pivots from quantum to VERTICAL after Will Oliver's reality check, still raises $VALUATION",
+  "Etay Maor's cybersecurity talk inspires STARTUP to raise $VALUATION for AI-secured VERTICAL",
+  "Regina Barzilay's healthcare AI lecture spawns STARTUP — $VALUATION for VERTICAL",
+  "STARTUP founded at Shy Bird happy hour, raises $VALUATION before the appetizers arrive",
+  "STARTUP's entire team was recruited from a WhatsApp group chat — now valued at $VALUATION",
+];
+
+const RED_FLAGS = [
+  // MIT-Specific
+  "'Proprietary algorithm' is just chain-of-thought prompting from Eric's lab",
+  "Leadership team has never heard of overfitting",
+  "Says 'institutional memory' but means 'a Google Docs folder'",
+  "Procurement approved it, but IT blocked it",
+  "Overfits to training data, fails on real customers",
+  "Business model is: 'We'll figure it out during Learning Synthesis'",
+  "Entire technical strategy is 'just use the prompting bucket'",
+  "Founder claims to have 'disrupted' every hands-on lab session",
+  "Pitch deck cites Amara's Law but misquotes it",
+  "CTO's LinkedIn says 'AI Whisperer, MIT-adjacent'",
+  // Generic
+  "Founder describes product as 'ChatGPT but better' in every meeting",
+  "The AI is actually 14 interns in a Slack channel",
+  "Burn rate exceeds the GDP of several small nations",
+  "The 'proprietary algorithm' is a nested if-else statement",
+  "Board meetings are just group therapy sessions",
+  "CTO's main contribution is a custom Notion template",
+  "The roadmap is a vision board with magazine cutouts",
+  "Competitors section of pitch deck just says 'None (we checked)'",
+  "The MVP is a Typeform connected to a Google Sheet",
+  "The AI model is GPT-4 with a custom system prompt",
+  "The pitch deck has more animations than a Pixar film",
+  "Data moat is literally just a spreadsheet the founder won't share",
+  "The 'team of 50' includes advisors, investors, pets, and Slack bots",
+  "'Enterprise clients' are the founder's college roommates",
+  "MVP is a Typeform connected to Claude",
+  "Capstone project was literally this startup pitch, presented on the last day",
+  "Founder's 'AI ethics framework' is a paragraph they wrote during Madry's session",
+  "Claims 'quantum-ready' after attending one Will Oliver lecture",
+  "Marketing strategy is entirely based on a single Renee Gosline slide",
+  "Supply chain AI was built during the Simchi-Levi session and hasn't been updated since",
+  "Gensler asked about their financials and the founder changed the subject",
+  "The 'agentic AI' is a cron job and a Slack webhook",
+  "Cybersecurity audit was skipped because 'Etay said most companies get hacked anyway'",
+  "Won The Great Debate by yelling the loudest",
+  "No held-out test set. Just vibes-based machine learning.",
+  "Confuses fluency with reliability — in the product AND the pitch deck",
+  "Deploys with hype, not discipline (Wojciech would be disappointed)",
+  "Treats hallucination as a feature and has a slide about it",
+  "Espresso machine budget exceeds engineering budget",
+  "Entire go-to-market strategy was brainstormed at Shy Bird over cocktails",
+  "Business plan was written on a Bakely napkin and never updated",
+  "WhatsApp group chat has more product ideas than the actual roadmap",
+  "Founder's 'market research' is asking the WhatsApp group chat if they'd use it",
+  "Team does all standups at Shy Bird happy hour",
+  "First 3 hires were people who responded fastest in the WhatsApp group",
+  "Office address is listed as 'a table at Shy Bird, Kendall Square'",
+];
+
+const EXITS = [
+  "Acqui-hired by Google for the Notion workspace alone",
+  "IPO on the strength of a single viral LinkedIn post",
+  "Acquired by Microsoft who will shut it down in 18 months",
+  "SPAC merger with a company that also has no revenue",
+  "Bought by Apple, immediately discontinued",
+  "Strategic acquisition by a confused Fortune 500 company",
+  "Sold to private equity, gutted for parts, somehow more profitable",
+  "Acqui-hired by Meta for the 'AI talent' (the intern)",
+  "Government contract nobody understands, prints money forever",
+  "CEO goes on a podcast, company gets acquired during the episode",
+  "MIT Sloan case study published, company acquired purely for the clout",
+  "Acquired by Anthropic to study what happens when prompting goes wrong",
+  "Capstone project becomes actual company; Sertac and Eric listed as advisors without consent",
+  "Huttenlocher writes about the startup in the next book as a cautionary tale",
+  "Glass House closing dinner speech becomes the company's origin story on Crunchbase",
+  "Quantum pivot after Will Oliver's talk; acquired by IBM before anyone realized it doesn't work yet",
+  "Shy Bird names a menu item after the startup; considered a more meaningful exit than the IPO",
+  "WhatsApp group chat becomes a paid community; ARR exceeds the actual product",
+  "Bakely offers to host the company full-time; founders accept because the coffee is better than the office",
+];
+
+const COMPARISONS = [
+  ["Uber","but for VERTICAL"],
+  ["Slack","meets VERTICAL"],
+  ["the iPhone moment","for VERTICAL"],
+  ["Salesforce","but actually useful, for VERTICAL"],
+  ["WeWork","but with AI and VERTICAL (what could go wrong)"],
+  ["Netflix","but instead of shows, it's VERTICAL"],
+  ["Stripe","for VERTICAL — except the payments part"],
+  ["a Bloomberg Terminal","for people who do VERTICAL"],
+  ["TikTok","for VERTICAL content nobody asked for"],
+  ["the AWS","of VERTICAL infrastructure"],
+  ["Sertac's three buckets","but applied to VERTICAL"],
+  ["Homo Silicus","but for VERTICAL at scale"],
+  ["Midjourney","but instead of images, it hallucinates VERTICAL"],
+  ["Cursor","but it autocompletes your VERTICAL strategy"],
+  ["Telegram","but for VERTICAL — and somehow worth a billion"],
+  ["Eleven Labs","but it deepfakes your VERTICAL"],
+  ["Gamma","but it presents your VERTICAL with zero substance"],
+  ["Bolt.new","but it ships broken VERTICAL in 30 seconds"],
+  ["Photoroom","but it removes the background from your VERTICAL problems"],
+  ["Cal AI","but it counts the calories in your VERTICAL spend"],
+  ["Mercor","but it's a talent marketplace for VERTICAL influencers"],
+  ["Lovable","but for VERTICAL — and the name writes itself"],
+  ["Notion","but somehow even more meta, for VERTICAL"],
+  ["Figma","but for designing VERTICAL workflows nobody will use"],
+  ["OpenAI","but honest about VERTICAL hallucinations"],
+  ["Perplexity","but it only searches for VERTICAL insights"],
+  ["Anthropic","but constitutional AI for VERTICAL ethics"],
+  ["a 1-person billion-dollar company","in VERTICAL — 0 employees, infinite interns"],
+  ["Palantir","but less creepy, for VERTICAL"],
+  ["Databricks","but the lakehouse is full of VERTICAL"],
+  ["the Jagged Frontier","of VERTICAL — some tasks superhuman, most broken"],
+  ["an espresso machine","but instead of coffee, it brews VERTICAL"],
+  ["a snow shovel","but for clearing VERTICAL — just ask the customer what they actually need"],
+  ["ChatGPT","but it only talks about VERTICAL and won't shut up"],
+  ["Canva","but for VERTICAL decks that all look the same"],
+  ["Zoom","but every meeting is about VERTICAL and could've been an email"],
+  ["Robinhood","but you're gambling on VERTICAL futures"],
+  ["Duolingo","but it passive-aggressively teaches you VERTICAL"],
+  ["GitHub Copilot","but for VERTICAL — it writes, you pray"],
+  ["the Shy Bird happy hour","but for VERTICAL networking that actually closes deals"],
+  ["a WhatsApp group chat","but monetized, for VERTICAL"],
+  ["Bakely coffee","but it fuels VERTICAL innovation instead of just caffeine addiction"],
+];
+
+// LINKEDIN POST TEMPLATES — each is a function(name, vertical, val, tagline, prof, session, framework, tags)
+const LI_TEMPLATES = [
+  // THE CLASSIC ANNOUNCEMENT
+  (n,v,val,tl,p,s,fw,t)=>`Some personal news:
+
+After two incredible weeks at the MIT AI Executive Academy, I'm launching ${n}.
+
+We're building the first AI-native platform for ${v}.
+
+Today we closed our ${val.s} round at ${val.a}. ${val.n}.
+
+"${tl}"
+
+Shoutout to ${p.name} for the inspiration (even though they don't know about this yet).
+
+We're hiring. DMs are open.
+
+${t}`,
+
+  // THE HUMBLE BRAG
+  (n,v,val,tl,p,s,fw,t)=>`I wasn't planning to share this yet.
+
+But 72 hours ago, I was sitting in ${p.name}'s session on ${p.topic} at MIT, and something clicked.
+
+Not a small click. A "quit my job and start a company" click.
+
+${n} is now live. We're bringing ${fw} to ${v}.
+
+We closed ${val.a} (${val.s}) this morning. ${val.n}.
+
+I'm not saying the MIT AI Executive Academy changed my life. But I am saying I walked in as a VP and I'm walking out as a CEO.
+
+${t}`,
+
+  // THE STORYTELLER
+  (n,v,val,tl,p,s,fw,t)=>`Two weeks ago, I didn't know what ${fw} was.
+
+Last Tuesday, ${p.name} explained it in a way that made everything make sense.
+
+By Wednesday, I had a napkin sketch.
+
+By Thursday, the napkin sketch had a pitch deck.
+
+By Friday, the pitch deck had a term sheet.
+
+${n} just raised ${val.a} to bring AI to ${v}. ${val.n}.
+
+"${tl}"
+
+The MIT AI Executive Academy isn't a program. It's a pipeline.
+
+${t}`,
+
+  // THE THREADED INSIGHT POST
+  (n,v,val,tl,p,s,fw,t)=>`3 things I learned at MIT this week that changed how I think about AI:
+
+1. ${fw} isn't a buzzword — it's a business model
+2. The real opportunity in ${v} is the thing nobody's automating yet
+3. If you wait for perfect data, you lose
+
+So we built ${n}.
+
+${val.s} round at ${val.a}. ${val.n}.
+
+${p.name} probably didn't intend for "${s}" to be a startup pitch. But here we are.
+
+Comment 'INTERESTED' and I'll send you our deck.
+
+${t}`,
+
+  // THE EMOTIONAL JOURNEY
+  (n,v,val,tl,p,s,fw,t)=>`Real talk for a second.
+
+Two years ago, I was afraid AI would make my role irrelevant. I almost didn't apply to the MIT AI Executive Academy.
+
+Then I sat in "${s}" with ${p.name} and realized: the people who learn this stuff aren't getting replaced. They're doing the replacing.
+
+Today I'm announcing ${n} — ${v}, powered by ${fw}.
+
+We just closed ${val.a}. ${val.n}.
+
+"${tl}"
+
+To the entire cohort: thank you. You know who you are.
+
+If you're on the fence about learning AI — stop being on the fence.
+
+${t}`,
+
+  // THE CONTRARIAN TAKE
+  (n,v,val,tl,p,s,fw,t)=>`Hot take: 90% of AI startups are building the wrong thing.
+
+They're automating tasks that don't matter.
+
+After two weeks at MIT, I know what actually matters: ${v}.
+
+That's why we built ${n}. That's why we just raised ${val.a} (${val.s}). ${val.n}.
+
+${p.name} said something during "${s}" that I keep replaying: the frontier is jagged. Some tasks are superhuman. Most are broken.
+
+We're focused on the superhuman part.
+
+${t}`,
+
+  // THE SHORT AND PUNCHY
+  (n,v,val,tl,p,s,fw,t)=>`New company. New chapter.
+
+${n}. AI for ${v}.
+
+${val.a} raised. ${val.s}. ${val.n}.
+
+"${tl}"
+
+Inspired by ${p.name} at MIT. Built at a table at Shy Bird. Funded before the entrees arrived.
+
+Let's go.
+
+${t}`,
+
+  // THE LINKEDIN PARODY (SELF-AWARE)
+  (n,v,val,tl,p,s,fw,t)=>`I know what you're thinking. "Another LinkedIn post about someone launching an AI startup after a two-week executive program."
+
+You're right. That's exactly what this is.
+
+${n} — the first platform to bring ${fw} to ${v}.
+
+${val.s} at ${val.a}. ${val.n}.
+
+Did ${p.name}'s session on ${p.topic} directly inspire this? Yes. Did I ask permission? No. Am I tagging them anyway? Absolutely.
+
+"${tl}"
+
+Agree? Repost. Disagree? Still repost.
+
+${t}`,
+
+  // THE WHATSAPP-TO-LINKEDIN PIPELINE
+  (n,v,val,tl,p,s,fw,t)=>`This started as a message in our cohort WhatsApp group at 11:47pm.
+
+By midnight, 6 people had replied "I'd pay for that."
+
+By 8am, we had a deck.
+
+By noon, we had ${val.a}.
+
+${n} is building AI for ${v} using ${fw}. ${val.n}.
+
+To the MIT AI Executive Academy WhatsApp group: you are the most unhinged, brilliant, overly-responsive group chat I have ever been part of. And now you're my investors.
+
+${t}`,
+
+  // THE ESPRESSO-FUELED FOUNDER
+  (n,v,val,tl,p,s,fw,t)=>`Credit where it's due: the MIT program team deployed an espresso machine for our cohort within 24 hours of someone asking. That kind of operational speed inspired us.
+
+${n} exists because of three things:
+- ${p.name}'s session on ${p.topic}
+- An irresponsible amount of espresso
+- A WhatsApp group chat that never sleeps
+
+We're building ${fw} for ${v}.
+
+${val.s}: ${val.a}. ${val.n}.
+
+"${tl}"
+
+Shoutout to the program staff. You don't just run a program — you run a startup accelerator and you don't even know it.
+
+${t}`,
+
+  // THE KENDALL SQUARE MOMENT
+  (n,v,val,tl,p,s,fw,t)=>`Standing outside E62 yesterday, looking at Kendall Square, it hit me:
+
+Every major AI company started with someone standing somewhere, thinking "what if?"
+
+My "what if" moment happened during "${s}" with ${p.name}.
+
+What if we could bring ${fw} to ${v}? What if the TAM is bigger than anyone thinks? What if we just... build it?
+
+${n} raised ${val.a} (${val.s}). ${val.n}.
+
+"${tl}"
+
+From Kendall Square with conviction.
+
+${t}`,
+
+  // THE "I HAVE A TEAM" POST
+  (n,v,val,tl,p,s,fw,t)=>`The best part of the MIT AI Executive Academy isn't the lectures (sorry, ${p.name}).
+
+It's the people.
+
+In two weeks, I found a co-founder, a CTO, an angel investor, and someone who's "interested but needs to check with their spouse first."
+
+Together, we're building ${n} — ${fw} for ${v}.
+
+${val.s}: ${val.a}. ${val.n}.
+
+We met during "${s}." We bonded at Shy Bird. We fundraised over Bakely coffee. The WhatsApp group chat did the rest.
+
+"${tl}"
+
+${t}`,
+];
+
+const HASHTAGS = [
+  "#AI","#StartupLife","#Disruption","#FutureOfWork","#Innovation",
+  "#VentureCapital","#BuildInPublic","#TechStartup","#Founders",
+  "#MITSloan","#KendallSquare","#SeriesA","#GenerativeAI","#LLMs",
+  "#DeepTech","#AIStartup","#FounderLife","#Entrepreneurship",
+  "#MITAI2026","#MITExecutiveAcademy","#ThreeBuckets","#HomoSilicus",
+  "#AmarasLaw","#AssistDontAutomate","#E62",
+];
+
+const LOCATIONS = [
+  {img:"img/dome.jpg",name:"The Great Dome",pin:"Killian Court, MIT Building 10"},
+  {img:"img/stata.jpg",name:"The Stata Center",pin:"MIT Building 32, Vassar Street"},
+  {img:"img/corridor.jpg",name:"The Infinite Corridor",pin:"MIT Building 7"},
+  {img:"img/sloan.jpg",name:"MIT Sloan School of Management",pin:"E62, Cambridge"},
+  {img:"img/hacks.jpg",name:"MIT Hacks — Student Street",pin:"Stata Center, Building 32"},
+  {img:"img/innovation.jpg",name:"Most Innovative Square Mile on the Planet",pin:"Main Street, Kendall Square"},
+  {img:"img/tower.jpg",name:"Kendall Square",pin:"One Broadway, Cambridge"},
+  {img:"img/walkway.jpg",name:"Main Street Walkway",pin:"Kendall Square, Cambridge"},
+];
+
+const USER_METRICS = () => [
+  `${R(50)+1} (mostly friends & family)`,
+  "TBD (we're pre-launch)",
+  `${R(10)+1} (${R(10)+1} are Homo Silicus)`,
+  "47,000 waitlist signups (we ran Facebook ads)",
+  `${R(5)+1} paying, ${R(200)+50} free`,
+  "Technically our mom counts as a DAU",
+  `${R(30)+5} synthetic customers (thanks Horton)`,
+  "0 real users, but our Homo Silicus NPS is 94",
+];
+
+const APP_REVIEWS = [
+  "Works great! (5★) — founder's mom",
+  "Crashed immediately. Will update review. (1★)",
+  '"Changed my life" — account created 2 hours ago (5★)',
+  "What does this app even do? (2★)",
+  "The AI told me to touch grass. Fair. (4★)",
+  "Pretty sure this is just a ChatGPT wrapper. (3★)",
+  "I was today years old when I learned I needed AI for this. I still don't. (2★)",
+  "Five stars if you don't try to use it. (3★)",
+  "Built during an MIT hands-on lab. And it shows. (2★)",
+  "My Homo Silicus loved it. My actual users? Different story. (3★)",
+  "Sertac said try prompting first. This app did not try prompting first. (1★)",
+  "This is what happens when you let exec-ed students build things during Capstone. (2★)",
+  "Gary Gensler would not approve of this business model. (1★)",
+  "I asked the AI agent to help me. It helped itself to my data. (2★)",
+  "Quantum-ready but not user-ready. Classic. (3★)",
+  "The closing dinner pitch was more convincing than the actual product. (3★)",
+];
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+
+const R=n=>Math.floor(Math.random()*n);
+const pick=a=>a[R(a.length)];
+const pickN=(a,n)=>[...a].sort(()=>Math.random()-.5).slice(0,Math.min(n,a.length));
+const fv=(t,v)=>t.replace(/VERTICAL/g,v);
+
+let history=[];
+let activeIdx=-1;
+let count=0;
+let currentStartup=null;
+
+// ═══════════════════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════════════════
+
+function fireConfetti(){
+  const c=document.getElementById('confetti');
+  const ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+
+  // Unicorn herd + sparkle trail
+  const unicorns=Array.from({length:18},()=>{
+    const size=Math.random()*28+22;
+    const fromLeft=Math.random()>.5;
+    return{
+      x:fromLeft?-60:c.width+60,
+      y:Math.random()*c.height*.6+c.height*.1,
+      size,
+      vx:(fromLeft?1:-1)*(Math.random()*4+3),
+      vy:Math.sin(Math.random()*Math.PI*2)*1.5,
+      wobble:Math.random()*Math.PI*2,
+      wobbleSpeed:Math.random()*.08+.03,
+      flip:fromLeft?1:-1,
+      opacity:1,
+      trail:[]
+    };
+  });
+
+  // Sparkle particles
+  const sparkles=[];
+  function addSparkles(x,y){
+    for(let i=0;i<3;i++){
+      sparkles.push({
+        x:x+(Math.random()-0.5)*20,
+        y:y+(Math.random()-0.5)*15,
+        size:Math.random()*3+1,
+        life:1,
+        decay:Math.random()*.02+.015,
+        color:pick(['#FFD700','#FF69B4','#A31F34','#C084FC','#FDE68A']),
+        vx:(Math.random()-.5)*1.5,
+        vy:(Math.random()-.5)*1.5,
+      });
+    }
+  }
+
+  function drawUnicorn(x,y,size,flip){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(flip,1);
+    const s=size/40;
+
+    // Body
+    ctx.fillStyle='#fff';
+    ctx.beginPath();
+    ctx.ellipse(0,0,18*s,12*s,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.stroke();
+
+    // Head
+    ctx.fillStyle='#fff';
+    ctx.beginPath();
+    ctx.ellipse(20*s,-8*s,8*s,7*s,-.3,0,Math.PI*2);
+    ctx.fill();ctx.stroke();
+
+    // Horn
+    ctx.fillStyle='#FFD700';
+    ctx.beginPath();
+    ctx.moveTo(26*s,-14*s);
+    ctx.lineTo(30*s,-28*s);
+    ctx.lineTo(22*s,-14*s);
+    ctx.closePath();
+    ctx.fill();
+    // Horn stripes
+    ctx.strokeStyle='#FFA500';ctx.lineWidth=.8;
+    ctx.beginPath();ctx.moveTo(24*s,-18*s);ctx.lineTo(27*s,-17*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(25*s,-22*s);ctx.lineTo(28*s,-21*s);ctx.stroke();
+
+    // Eye
+    ctx.fillStyle='#1B1B1B';
+    ctx.beginPath();
+    ctx.arc(23*s,-8*s,1.8*s,0,Math.PI*2);
+    ctx.fill();
+    // Eye shine
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(23.5*s,-8.5*s,.7*s,0,Math.PI*2);ctx.fill();
+
+    // Mane (rainbow)
+    const maneColors=['#e74c3c','#f39c12','#f1c40f','#2ecc71','#3498db','#9b59b6'];
+    maneColors.forEach((col,i)=>{
+      ctx.strokeStyle=col;ctx.lineWidth=2.2*s;ctx.lineCap='round';
+      ctx.beginPath();
+      ctx.moveTo((14-i*2)*s,(-14+i*.5)*s);
+      ctx.quadraticCurveTo((8-i*3)*s,(-18+i*2)*s,(4-i*3)*s,(-10+i*3)*s);
+      ctx.stroke();
+    });
+
+    // Tail (rainbow)
+    maneColors.forEach((col,i)=>{
+      ctx.strokeStyle=col;ctx.lineWidth=2*s;ctx.lineCap='round';
+      ctx.beginPath();
+      ctx.moveTo(-18*s,(i*1.5-4)*s);
+      ctx.quadraticCurveTo((-26-i)*s,(i*2-6)*s,(-30-i)*s,(i*3-2)*s);
+      ctx.stroke();
+    });
+
+    // Legs
+    ctx.strokeStyle='#e0e0e0';ctx.lineWidth=2.5*s;ctx.lineCap='round';
+    [[-8,12,{a:-6,b:20}],[4,12,{a:6,b:20}],[-12,10,{a:-14,b:18}],[8,10,{a:10,b:18}]].forEach(([lx,ly,{a,b}])=>{
+      ctx.beginPath();ctx.moveTo(lx*s,ly*s);ctx.lineTo(a*s,b*s);ctx.stroke();
+    });
+    // Hooves
+    ctx.fillStyle='#FFD700';
+    [[-6,20],[6,20],[-14,18],[10,18]].forEach(([hx,hy])=>{
+      ctx.beginPath();ctx.ellipse(hx*s,hy*s,2.5*s,1.5*s,0,0,Math.PI*2);ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  let frame=0;
+  function anim(){
+    ctx.clearRect(0,0,c.width,c.height);
+
+    // Draw sparkles
+    sparkles.forEach((sp,i)=>{
+      sp.x+=sp.vx;sp.y+=sp.vy;sp.life-=sp.decay;
+      if(sp.life<=0)return;
+      ctx.globalAlpha=sp.life;
+      ctx.fillStyle=sp.color;
+      // 4-point star shape
+      ctx.save();ctx.translate(sp.x,sp.y);
+      ctx.beginPath();
+      const r=sp.size;
+      for(let j=0;j<4;j++){
+        const ang=j*Math.PI/2;
+        ctx.lineTo(Math.cos(ang)*r,Math.sin(ang)*r);
+        ctx.lineTo(Math.cos(ang+Math.PI/4)*r*.3,Math.sin(ang+Math.PI/4)*r*.3);
+      }
+      ctx.closePath();ctx.fill();ctx.restore();
+    });
+    ctx.globalAlpha=1;
+
+    // Draw unicorns
+    unicorns.forEach(u=>{
+      u.wobble+=u.wobbleSpeed;
+      u.x+=u.vx;
+      u.y+=Math.sin(u.wobble)*1.2;
+
+      // Fade out near edges
+      if(frame>100)u.opacity=Math.max(0,u.opacity-.015);
+
+      if(u.opacity>0){
+        ctx.globalAlpha=u.opacity;
+        drawUnicorn(u.x,u.y,u.size,u.flip);
+        ctx.globalAlpha=1;
+        // Sparkle trail behind each unicorn
+        if(frame%3===0)addSparkles(u.x-u.vx*5,u.y);
+      }
+    });
+
+    // Clean dead sparkles every 30 frames
+    if(frame%30===0){
+      let i=sparkles.length;
+      while(i--)if(sparkles[i].life<=0)sparkles.splice(i,1);
+    }
+
+    if(++frame<200)requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,c.width,c.height);
+  }
+  anim();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GENERATOR
+// ═══════════════════════════════════════════════════════════════
+
+// PROFESSOR → SESSION MAPPING (which sessions each prof actually teaches)
+const PROF_SESSIONS = {
+  "Sertac Karaman": ["AI's Potential to Transform Our World Today","Today's AI: Data and Compute","Your Data Strategy for AI","Deploying AI"],
+  "Eric So": ["Use Cases at Work: Where Does AI Fit In?","Hands On: Effective Prompting","Economic Decisions in AI: A Behavioral Perspective","Hands On: Coding + Co-Work"],
+  "Wojciech Matusik": ["Fundamentals of Machine Learning","Fundamentals of Generative AI"],
+  "Vincent Sitzmann": ["Multi-Modal Generative AI","Hands On: AI in Images, Video & Voice"],
+  "John J. Horton": ["AI Agents for Business Simulation"],
+  "Priya Donti": ["AI, Energy Use & Sustainability"],
+  "Tim Kraska": ["Agentic AI","Hands On: Building AI Agents"],
+  "Etay Maor": ["AI & Cybersecurity"],
+  "Regina Barzilay": ["AI for Healthcare & Life Sciences"],
+  "Nick van der Meulen": ["Digital Business Transformation in the Age of AI"],
+  "Aleksander Madry": ["Ethical & Trust Considerations in AI"],
+  "Renee Richardson Gosline": ["AI & Marketing"],
+  "David Simchi-Levi": ["Supply Chain Transformation with AI"],
+  "Danielle Li": ["AI for Competitive Advantage","AI & The Future of the Workforce"],
+  "Steven Eppinger": ["Deploying AI for Innovation","AI: The Intelligence Paradox"],
+  "Gary Gensler": ["AI & Money"],
+  "Daniel P. Huttenlocher": ["The Age of AI & Our Human Future"],
+  "Roberto Fernandez": ["Resistance to Change: Leading AI Adoption at Work"],
+  "Will Oliver": ["Quantum Computing Myths & Truths"],
+};
+
+// PROFESSOR → FRAMEWORKS they're associated with
+const PROF_FRAMEWORKS = {
+  "Sertac Karaman": ["Sertac's Three Buckets (Training / Fine-tuning / Prompting)","the Data Strategy for AI framework","Amara's Law"],
+  "Eric So": ["Co-Intelligence (Ethan Mollick's Four Rules)","the Jagged Frontier (it's expanding)","Assist vs. Automate","Efficiency AI vs. Opportunity AI"],
+  "Wojciech Matusik": ["Overfitting (explained like you're 10)","next-token prediction (it completes patterns, it doesn't look things up)"],
+  "Vincent Sitzmann": ["next-token prediction (it completes patterns, it doesn't look things up)"],
+  "John J. Horton": ["Homo Silicus","Synthetic Customers","Infinite Interns (600K reports for $250)"],
+  "Priya Donti": ["Efficiency AI vs. Opportunity AI"],
+  "Tim Kraska": ["agentic AI orchestration"],
+  "Etay Maor": ["agentic AI orchestration"],
+  "Regina Barzilay": ["the Jagged Frontier (it's expanding)"],
+  "Nick van der Meulen": ["digital business transformation maturity","Institutional Memory"],
+  "Aleksander Madry": ["Madry's trust calibration model"],
+  "Renee Richardson Gosline": ["Co-Intelligence (Ethan Mollick's Four Rules)"],
+  "David Simchi-Levi": ["supply chain AI transformation"],
+  "Danielle Li": ["the Jagged Frontier (it's expanding)","Infinite Interns (600K reports for $250)"],
+  "Steven Eppinger": ["the Intelligence Paradox","Efficiency AI vs. Opportunity AI"],
+  "Gary Gensler": ["Gensler's AI & Money framework"],
+  "Daniel P. Huttenlocher": ["Huttenlocher's human-AI future thesis","the Schwarzman College of Computing ethos"],
+  "Roberto Fernandez": ["resistance to change theory"],
+  "Will Oliver": ["quantum computing (the myths, not the truths)"],
+};
+
+// PROFESSOR → OVERHEARD QUOTES (filter by name appearing in ctx)
+function getOverheardForProf(prof){
+  const name=prof.name;const short=prof.short;
+  const matches=OVERHEARD.filter(o=>o.ctx.includes(name)||o.ctx.includes(short));
+  return matches.length>0?matches:null;
+}
+
+// WEEK TIMING — sessions in order, map to day references
+const WEEK1_SESSIONS=SESSIONS.slice(0,21);
+const WEEK2_SESSIONS=SESSIONS.slice(21);
+
+// LOCATION GROUPS — indoor E62 vs campus tour vs Kendall Square
+const LOCATIONS_E62=[LOCATIONS.find(l=>l.name.includes("Sloan"))];
+const LOCATIONS_CAMPUS=[LOCATIONS.find(l=>l.name.includes("Dome")),LOCATIONS.find(l=>l.name.includes("Stata")),LOCATIONS.find(l=>l.name.includes("Corridor")),LOCATIONS.find(l=>l.name.includes("Hacks"))];
+const LOCATIONS_KENDALL=[LOCATIONS.find(l=>l.name.includes("Innovative")),LOCATIONS.find(l=>l.name==="Kendall Square"),LOCATIONS.find(l=>l.name.includes("Walkway"))].filter(Boolean);
+
+function generateStartup(){
+  const name=pick(PREFIXES)+pick(SUFFIXES);
+  const vertical=pick(VERTICALS);
+  const val=pick(VALUATIONS);
+  const quote=pick(QUOTES);
+  const tagline=fv(pick(TAGLINES),vertical);
+  const roles=pickN(ROLES,R(4)+3);
+  const redFlags=pickN(RED_FLAGS,3);
+  const exit=pick(EXITS);
+  const comp=pick(COMPARISONS);
+  const comparison=`It's like ${comp[0]}, ${fv(comp[1],vertical)}`;
+
+  // ═══ COHERENCE: Pick ONE professor, then derive everything from them ═══
+  const prof=pick(PROFESSORS);
+
+  // Session must be one this professor actually teaches
+  const profSessions=PROF_SESSIONS[prof.name]||[pick(SESSIONS)];
+  const session=pick(profSessions);
+
+  // Framework should relate to this professor
+  const profFrameworks=PROF_FRAMEWORKS[prof.name]||FRAMEWORKS;
+  const framework=pick(profFrameworks);
+
+  // Overheard quote — prefer one from this professor, fall back to generic program vibes
+  const profOverheard=getOverheardForProf(prof);
+  const overheard=profOverheard?pick(profOverheard):pick(OVERHEARD);
+
+  // TechCrunch — use the selected prof/session consistently
+  const tcGeneric=TC_TEMPLATES.filter(t=>!t.includes("Sertac")&&!t.includes("Horton")&&!t.includes("Gensler")&&!t.includes("Barzilay")&&!t.includes("Oliver")&&!t.includes("Etay")&&!t.includes("Fernandez")&&!t.includes("Gosline")&&!t.includes("Wojciech"));
+  // Pick from prof-specific TC templates if they exist, otherwise generic
+  const tcProfSpecific=TC_TEMPLATES.filter(t=>t.includes(prof.short)||t.includes(prof.name));
+  const tcPool=tcProfSpecific.length>0&&Math.random()>.4?tcProfSpecific:tcGeneric;
+  const tc=(tcPool.length>0?pick(tcPool):pick(TC_TEMPLATES)).replace("STARTUP",name).replace("$VALUATION",val.a).replace("VERTICAL",vertical);
+
+  // Origin story — use the SAME prof + session, pick location to match context
+  const isClassOrigin=Math.random()>.2; // 80% class-inspired, 20% campus/offsite
+  let origin,location;
+
+  if(isClassOrigin){
+    // Founded in class → show E62 or general campus photo
+    const originTemplates=[
+      `Conceived during <strong>${session}</strong> with ${prof.name}. ${prof.short} has no idea.`,
+      `Born in the back row of <strong>${session}</strong>. ${prof.short} was mid-sentence about ${prof.topic}.`,
+      `Idea first scribbled on a napkin at lunch after <strong>${session}</strong> with ${prof.name}.`,
+      `Pitched to the person sitting next to you during the break after <strong>${session}</strong>.`,
+      `Direct result of ${prof.short} saying something brilliant during <strong>${session}</strong> and the founder hearing something completely different.`,
+      `Built during <strong>${session}</strong> instead of paying attention to ${prof.short}'s slides.`,
+    ];
+    origin=pick(originTemplates);
+    location=Math.random()>.5?pick(LOCATIONS_E62):pick(LOCATIONS_CAMPUS);
+  } else {
+    // Founded off-campus → campus tour or Kendall Square
+    if(Math.random()>.5){
+      origin=`Founder had the idea during the campus tour. Got lost in the Infinite Corridor. Found a business model.`;
+      location=pick(LOCATIONS_CAMPUS);
+    } else {
+      const offsite=[
+        `Idea born at Shy Bird over drinks after ${prof.short}'s session on <strong>${prof.topic}</strong>.`,
+        `Started as a WhatsApp message at 11pm after <strong>${session}</strong>. Had a deck by morning.`,
+        `Sketched on a Bakely coffee napkin during a break from <strong>${session}</strong>.`,
+        `Conceived while walking through Kendall Square after <strong>${session}</strong> with ${prof.name}.`,
+      ];
+      origin=pick(offsite);
+      location=pick(LOCATIONS_KENDALL);
+    }
+  }
+  if(!location)location=pick(LOCATIONS); // safety fallback
+
+  // LinkedIn post — uses the SAME prof, session, framework
+  const tags=pickN(HASHTAGS,5).join(" ");
+  const linkedinPost=pick(LI_TEMPLATES)(name,vertical,val,tagline,prof,session,framework,tags);
+
+  const metrics={
+    burn:`$${R(900)+100}K/mo`,
+    runway:`${R(18)+2} months`,
+    users:pick(USER_METRICS()),
+    nps:R(201)-100,
+    ghStars:R(15),
+    pivot:`${R(90)+7} days`,
+  };
+  const appRating=(Math.random()*3+2).toFixed(1);
+  const appRevs=pickN(APP_REVIEWS,3);
+  const tam=`$${(R(500)+10)}B`;
+
+  // Program trope
+  const trope=pick(TROPES);
+
+  return{name,vertical,val,quote,tagline,roles,redFlags,exit,comparison,tc,linkedinPost,metrics,appRating,appRevs,tam,origin,overheard,framework,trope,prof,session,location};
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STOCK TICKER SVG
+// ═══════════════════════════════════════════════════════════════
+
+function tickerHTML(name){
+  const prices=[Math.random()*50+20];
+  for(let i=1;i<30;i++){prices.push(Math.max(.5,prices[i-1]+(Math.random()-.45)*8))}
+  const max=Math.max(...prices),min=Math.min(...prices),range=max-min||1;
+  const cur=prices[29],prev=prices[28],chg=cur-prev,pct=((chg/prev)*100).toFixed(1);
+  const up=chg>=0;
+  const sym=name.replace(/[^A-Z]/g,'').slice(0,4)||'AI';
+  const W=200,H=60;
+  const pts=prices.map((p,i)=>`${(i/29)*W},${H-((p-min)/range)*H}`).join(' ');
+  const color=up?'#2ecc71':'#e74c3c';
+  return`<div class="ticker">
+    <div><div class="ticker-sym">$${sym}</div><div class="ticker-price">$${cur.toFixed(2)}</div>
+    <div class="ticker-change ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(chg).toFixed(2)} (${up?'+':''}${pct}%)</div></div>
+    <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs><linearGradient id="tg${R(9999)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity=".3"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="0,${H} ${pts} ${W},${H}" fill="url(#tg${R(9999)})"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER CARD
+// ═══════════════════════════════════════════════════════════════
+
+// SVG ICON HELPERS
+const ICO={
+  cap:`<svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>`,
+  pin:`<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>`,
+  flame:`<svg viewBox="0 0 24 24"><path d="M12 12c-2-2.67-4-4.33-4-6 0-2.21 1.79-4 4-4s4 1.79 4 4c0 1.67-2 3.33-4 6zm0 0c2 2.67 4 4.33 4 6a4 4 0 0 1-8 0c0-1.67 2-3.33 4-6z"/>`,
+  clock:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+  chart:`<svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>`,
+  user:`<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>`,
+  star:`<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+  target:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>`,
+  flag:`<svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>`,
+  clipboard:`<svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>`,
+  door:`<svg viewBox="0 0 24 24"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><line x1="12" y1="14" x2="12" y2="14.01"/>`,
+  quote:`<svg viewBox="0 0 24 24"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.76-2.01-2-2H4c-1.25 0-2 .76-2 2v6c0 1.25.76 2 2 2h4l-2 6"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.75-2.01-2-2h-4c-1.25 0-2 .76-2 2v6c0 1.25.76 2 2 2h4l-2 6"/>`,
+  zap:`<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+  newspaper:`<svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="10" x2="18" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/>`,
+};
+function ico(name,cls=''){return`<span class="ico ${cls}">${ICO[name]}</svg></span>`}
+
+function renderCard(s,hidden){
+  return`<div class="card${hidden?' hidden':''}" id="card">
+    <div class="card-hero"><div class="pattern"></div><div class="inner">
+      <div class="startup-name">${s.name}</div>
+      <div class="tagline">"${s.tagline}"</div>
+      <div class="comparison-pill">${s.comparison}</div>
+    </div></div>
+    <div class="card-body">
+
+      <!-- ORIGIN STORY -->
+      <div class="origin">
+        <div class="icon">${ico('cap')}</div>
+        <div class="text">${s.origin}</div>
+      </div>
+
+      <!-- FOUNDED AT PHOTO -->
+      <div class="loc-card">
+        <img src="${s.location.img}" alt="${s.location.name}" loading="lazy">
+        <div class="loc-overlay">
+          <div class="loc-pin">${ico('pin','ico-sm')} ${s.location.pin}</div>
+          <div class="loc-name">Founded at: ${s.location.name}</div>
+        </div>
+      </div>
+
+      ${tickerHTML(s.name)}
+
+      <div class="sh"><div class="line r"></div>Funding<div class="line"></div></div>
+      <div class="funding"><div class="amt">${s.val.a}</div><div class="stage">${s.val.s}</div><div class="note">${s.val.n}</div></div>
+
+      <div class="sh"><div class="line r"></div>The Pitch<div class="line"></div></div>
+      <div class="pitch">We're building the first AI-native platform for <strong>${s.vertical}</strong>, powered by ${s.framework}. Using proprietary technology developed in partnership with absolutely nobody from MIT, we're poised to capture a ${s.tam} market that most people don't even know exists yet. Because it might not.</div>
+
+      <div class="sh"><div class="line r"></div>Definitely Said in E62 (Probably)<div class="line"></div></div>
+      <div class="overheard">
+        <div class="oh-label">${ico('quote','ico-sm')} Overheard* at MIT AI Executive Academy</div>
+        <div class="oh-quote">"${s.overheard.quote}"</div>
+        <div class="oh-ctx">— ${s.overheard.ctx}</div>
+        <div style="font-size:9px;color:#bbb;margin-top:8px;font-style:normal">*Satire. Any resemblance to actual faculty statements is entirely intentional and affectionate.</div>
+      </div>
+
+      <div class="sh"><div class="line r"></div>Key Metrics<div class="line"></div></div>
+      <div class="metrics">
+        <div class="metric"><div class="icon">${ico('flame')}</div><div class="label">Burn Rate</div><div class="val">${s.metrics.burn}</div></div>
+        <div class="metric"><div class="icon">${ico('clock')}</div><div class="label">Runway</div><div class="val">${s.metrics.runway}</div></div>
+        <div class="metric"><div class="icon">${ico('chart')}</div><div class="label">NPS</div><div class="val">${s.metrics.nps}</div></div>
+        <div class="metric"><div class="icon">${ico('user')}</div><div class="label">Users</div><div class="val">${s.metrics.users}</div></div>
+        <div class="metric"><div class="icon">${ico('star')}</div><div class="label">GitHub Stars</div><div class="val">${s.metrics.ghStars}</div></div>
+        <div class="metric"><div class="icon">${ico('target')}</div><div class="label">Days to Pivot</div><div class="val">${s.metrics.pivot}</div></div>
+      </div>
+
+      <div class="sh"><div class="line r"></div>Leadership Team<div class="line"></div></div>
+      <div class="tags">${s.roles.map(r=>`<span class="tag">${r}</span>`).join('')}</div>
+
+      <div class="sh"><div class="line r"></div>Program Trope of the Day<div class="line"></div></div>
+      <div class="trope-card">
+        ${ico('clipboard','ico-lg')}
+        <span>${s.trope}</span>
+      </div>
+
+      <div class="sh"><div class="line r"></div>Red Flags (Investors Are Ignoring)<div class="line"></div></div>
+      <div>${s.redFlags.map(f=>`<div class="flag"><span class="ficon">${ico('flag','ico-sm')}</span><span>${f}</span></div>`).join('')}</div>
+
+      <div class="sh"><div class="line r"></div>App Store Reviews — ${s.appRating}★<div class="line"></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">${s.appRevs.map(r=>`<div class="review">${r}</div>`).join('')}</div>
+
+      <div class="sh"><div class="line r"></div>As Seen In TechCrunch<div class="line"></div></div>
+      <div class="tc"><div class="badge2">${ico('newspaper','ico-sm')} TechCrunch Exclusive</div><div class="hl">${s.tc}</div><div class="byline">By a journalist who definitely understood the product · 3 min read</div></div>
+
+      <div class="sh"><div class="line r"></div>Exit Strategy<div class="line"></div></div>
+      <div class="exit">${ico('door','ico-lg')}<span>${s.exit}</span></div>
+
+      <div class="sh"><div class="line r"></div>What Investors Are Saying<div class="line"></div></div>
+      <div class="iq"><div class="qt">"${s.quote.q}"</div><div class="src">— ${s.quote.s}</div></div>
+
+      <div class="sh"><div class="line r"></div>Founder's LinkedIn Post (Ready to Copy)<div class="line"></div></div>
+      <div class="li-card">
+        <div class="li-header">
+          <div class="li-avatar">${s.name[0]}</div>
+          <div><div class="li-name">Founder McFounderface</div><div class="li-title">CEO @ ${s.name} | MIT AI Executive Academy '26 | Building the future of ${s.vertical}</div></div>
+        </div>
+        <div class="li-body collapsed" id="liBody">${s.linkedinPost}<div class="fade" id="liFade"></div></div>
+        <div class="li-actions">
+          <button class="li-toggle" onclick="toggleLinkedIn()">Show more</button>
+          <button class="li-copy" id="copyBtn" onclick="copyLinkedIn()">Copy Post</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function generate(){
+  const btn=document.getElementById('genBtn');
+  btn.classList.add('loading');
+  btn.innerHTML='<div class="shimmer"></div><span style="position:relative">Disrupting...</span>';
+  document.getElementById('cardContainer').innerHTML=currentStartup?renderCard(currentStartup,true):'';
+
+  setTimeout(()=>{
+    const s=generateStartup();
+    currentStartup=s;
+    history.unshift(s);
+    if(history.length>20)history=history.slice(0,20);
+    activeIdx=0;
+    count++;
+    btn.classList.remove('loading');
+    btn.innerHTML='Generate Another';
+    renderHistory();
+    document.getElementById('cardContainer').innerHTML=renderCard(s,true);
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>{document.getElementById('card').classList.remove('hidden')})});
+    fireConfetti();
+  },600);
+}
+
+function renderHistory(){
+  if(history.length<2){document.getElementById('historySection').style.display='none';return}
+  document.getElementById('historySection').style.display='block';
+  document.getElementById('historyCount').textContent=history.length;
+  document.getElementById('historyPills').innerHTML=history.map((s,i)=>
+    `<button class="pill${i===activeIdx?' active':''}" onclick="showHistory(${i})">${s.name}</button>`
+  ).join('');
+}
+
+function showHistory(idx){
+  activeIdx=idx;
+  currentStartup=history[idx];
+  renderHistory();
+  document.getElementById('cardContainer').innerHTML=renderCard(history[idx],false);
+}
+
+function toggleLinkedIn(){
+  const body=document.getElementById('liBody');
+  const fade=document.getElementById('liFade');
+  const btn=body.parentElement.querySelector('.li-toggle');
+  if(body.classList.contains('collapsed')){
+    body.classList.remove('collapsed');body.style.maxHeight='600px';
+    if(fade)fade.style.display='none';btn.textContent='Show less';
+  }else{
+    body.classList.add('collapsed');body.style.maxHeight='120px';
+    if(fade)fade.style.display='block';btn.textContent='Show more';
+  }
+}
+
+function copyLinkedIn(){
+  if(!currentStartup)return;
+  const btn=document.getElementById('copyBtn');
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(currentStartup.linkedinPost).then(()=>{
+        btn.textContent='Copied!';btn.classList.add('copied');
+        setTimeout(()=>{btn.textContent='Copy Post';btn.classList.remove('copied')},2000);
+      });
+    }else{
+      const el=document.createElement('textarea');
+      el.value=currentStartup.linkedinPost;
+      document.body.appendChild(el);el.select();
+      document.execCommand('copy');document.body.removeChild(el);
+      btn.textContent='Copied!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='Copy Post';btn.classList.remove('copied')},2000);
+    }
+  }catch(e){}
+}
+
+window.addEventListener('resize',()=>{
+  const c=document.getElementById('confetti');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+});
+</script>
+</body>
+</html>
